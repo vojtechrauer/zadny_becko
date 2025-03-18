@@ -1,0 +1,78 @@
+{% extends 'blog/main.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="container pt-5">
+    <div class="row gx-5">
+        <!-- Blog entries-->
+        <div class="col-lg-9">
+            <!-- Nested row for non-featured blog posts-->
+            <div class="row">
+                {% for film in films %}
+                <div class="col-lg-6">
+                    <!-- Blog post-->
+                    <div class="card mb-4 border-0">
+                        <a href="#!"><img class="card-img-top" src="{{ film.image.url }}" alt="..." /></a>
+                        <div class="card-body">
+                            <div class="small text-muted">{{ film.created }}</div>
+                            <h2 class="card-title h4">{{ film.title }}</h2>
+                            <p class="card-text">{{ film.summary }}</p>
+                            <a class="btn btn-dark" href="{% url 'film-detail' film.slug  %}">Detail filmu →</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            </div>
+        <!-- Side widgets-->
+        <div class="col-lg-3">
+            <!-- Search widget-->
+            <div class="card mb-4">
+                <div class="card-header">Vyhledávání</div>
+                <div class="card-body">
+                    <form method="get" action="">
+                        <div class="input-group">
+                            <input name="hledat" class="form-control" type="text" placeholder="Zadej název hledaného filmu" aria-label="Enter search term..." aria-describedby="button-search" />
+                            <input type="submit" class="btn btn-dark" value="hledat"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- Categories widget-->
+            <div class="card mb-4">
+                <div class="card-header">Populární tagy</div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for tag in tags %}
+                        <div class="col-sm-6">
+                            <ul class="list-unstyled mb-0">
+                                <li><a href="?tag={{ tag.slug }}">{{ tag.name }}</a></li>
+                            </ul>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <!-- Side widget-->
+            <div class="card mb-4 bg-light border-0">
+                <div class="h3 mb-4 d-flex justify-content-center">Nejnovější recenze</div>
+                {% for review in reviews %}
+                <div>
+                    <!-- Blog post-->
+                    <div class="card mb-4 border-0">
+                        <a href="#!"><img class="card-img-top" src="{{ review.image.url }}" alt="..." /></a>
+                        <div class="card-body">
+                            <div class="small text-muted">{{ review.created }}</div>
+                            <h5 class="card-title h5 text-bold">{{ review.title }}</h5>
+                            <a class="btn btn-dark" href="{% url 'review-detail' review.slug  %}">číst →</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'blog/pagination.html' with page=films %}
+{% endblock content %}
