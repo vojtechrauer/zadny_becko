@@ -1,5 +1,5 @@
 {% extends 'blog/main.html' %}
-
+{% load static %}
 {% block content %}
 
 <section class="h-100 gradient-custom-2">
@@ -37,81 +37,6 @@
 
 
 
-              <!-- carousel -->
-<div id="cardCarousel" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
-        <!-- První slide -->
-        <div class="carousel-item active">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <h5 class="card-title">Karta 1</h5>
-                            <p class="card-text">Obsah první karty.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <h5 class="card-title">Karta 2</h5>
-                            <p class="card-text">Obsah druhé karty.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <h5 class="card-title">Karta 3</h5>
-                            <p class="card-text">Obsah třetí karty.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Druhý slide -->
-        <div class="carousel-item">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <h5 class="card-title">Karta 4</h5>
-                            <p class="card-text">Obsah čtvrté karty.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <h5 class="card-title">Karta 5</h5>
-                            <p class="card-text">Obsah páté karty.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <h5 class="card-title">Karta 6</h5>
-                            <p class="card-text">Obsah šesté karty.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Ovládací tlačítka -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#cardCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#cardCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-    </button>
-</div>
-
-
             <div class="mb-5 text-center d-flex flex-column">
               <p class="lead fw-normal mb-1">Oblíbené filmy</p>
               <div class="p-4 bg-body-tertiary d-flex flex-wrap justify-content-center">
@@ -138,7 +63,13 @@
                     <!-- Blog review-->
                     <div class="card mb-4 border-0">
                         <a href="{% url 'review-detail' review.slug %}"><img class="card-img-top" src="{{review.image.url}}" alt="..." /></a>
+
                         <div class="card-body">
+                            <div class="rating">
+                                {% for _ in ""|rjust:review.rating %}
+                                <img src="{% static 'assets/star.svg' %}" class="ml-3 mb-3" style="height: 30px;"/>
+                                {% endfor %}
+                            </div>
                             <div class="small text-muted">{{review.created}}</div>
                             <h2 class="card-title h4">{{review.title}}</h2>
                             <p class="card-text">{{ review.body|truncatechars_html:100|safe}}</p>

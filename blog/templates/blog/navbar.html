@@ -1,25 +1,43 @@
 
 {% load static %}
-<nav class="navbar navbar-expand-lg px-4 py-2 bg-light">
+
+
+
+
+
+<nav class="navbar navbar-expand-lg px-4 py-2 navbar-dark justify-content-between">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'home' %}">žádný béčko</a>
+    <a class="navbar-brand text-white" href="{% url 'home' %}">žádný béčko</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul class="navbar-nav mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'home' %}">Domů</a>
+          <a class="nav-link text-white" href="{% url 'home' %}">Domů</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'film-list' %}">Filmy</a>
+          <a class="nav-link text-white" href="{% url 'film-list' %}">Filmy</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'review-list' %}">Recenze</a>
+          <a class="nav-link text-white" href="{% url 'review-list' %}">Recenze</a>
         </li>
       </ul>
+
+      {% if request.resolver_match.view_name == "film-list" or request.resolver_match.view_name == "review-list" %}
+      <form class="d-none d-lg-flex mx-auto w-50" role="search" method="get" action="">
+        <input name="hledat" class="form-control me-2 bg-dark text-white" type="search" placeholder="Zadejte název hledaného filmu" aria-label="Search">
+        <button class="btn btn-outline-warning" type="submit">Hledat</button>
+      </form>
+      {% else %}
+      <form class="d-none d-lg-flex mx-auto w-50" role="search" style="visibility: hidden;" method="get" action="">
+        <input name="hledat" class="form-control me-2 bg-dark text-white" type="search" placeholder="Zadejte název hledaného filmu" aria-label="Search">
+        <button class="btn btn-outline-warning" type="submit">Hledat</button>
+      </form>
+      {% endif %}
+
       {% if request.user.is_authenticated %}
-      <button class="btn btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><img src="{% static 'assets/chevron-left.svg' %}" class="me-2"/>{{ request.user.username }}</button>
+      <button class="btn btn-warning" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><img src="{% static 'assets/chevron-left.svg' %}" class="me-2"/>{{ request.user.username }}</button>
 <!--      <div class="nav-item dropdown">-->
 <!--        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
 <!--          {{ request.user.username }}-->
@@ -32,7 +50,7 @@
 <!--      </div>-->
       {% else %}
       <div class="d-flex align-items-center justify-content-center">
-        <a href="{% url 'login' %}" class="nav-link"><button type="submit" class="btn btn-outline-dark mx-2 p-1 px-2">Přihlásit se</button></a>
+        <a href="{% url 'login' %}" class="nav-link"><button type="submit" class="btn btn-outline-light mx-2 p-1 px-2">Přihlásit se</button></a>
         <a href="{% url 'register' %}" class="nav-link "><button type="submit" class="btn btn-warning p-1 px-2">Registrovat se</button></a>
       </div>
       {% endif %}

@@ -1,14 +1,16 @@
 {% extends 'blog/main.html' %}
 {% load static %}
+
+
 {% block content %}
-<div class="container pt-5">
-    <div class="row gx-5">
+<div class="container-fluid">
+    <div class="row gx-2 mt-5">
         <!-- Blog entries-->
-        <div class="col-lg-9">
+        <div class="col-lg-10">
             <!-- Nested row for non-featured blog posts-->
-            <div class="row px-5">
+            <div class="row px-2">
                 {% for review in reviews %}
-                <div class="col-lg-6">
+                <div class="col-md-6">
                     <!-- Blog post-->
                     <div class="card mb-4 bg-white border-0">
                         <a href="#!"><img class="card-img-top" src="{{ review.image.url }}" alt="..." /></a>
@@ -42,33 +44,15 @@
             </div>
         </div>
         <!-- Side widgets-->
-        <div class="col-lg-3">
-            <!-- Search widget-->
-            <div class="card mb-4">
-                <div class="card-header">Vyhledávání</div>
-                <div class="card-body">
-                    <form method="get" action="">
-                        <div class="input-group">
-                            <input name="hledat" class="form-control" type="text" placeholder="Zadej název hledaného filmu" aria-label="Enter search term..." aria-describedby="button-search" />
-                            <input type="submit" class="btn btn-dark" value="hledat"/>
-                        </div>
-                    </form>
-                </div>
-            </div>
+        <div class="col-lg-2">
             <!-- Categories widget-->
-            <div class="card mb-4 bg-light border-0">
+            <div class="card mb-4 bg-dark text-white border-0">
                   <div class="h3 mb-4 d-flex justify-content-center">Populární filmy</div>
                   {% for film in popular_films %}
                   <div>
                       <!-- Blog post-->
-                     <div class="card mb-4 border-0">
+                     <div class="card mb-4 border-0 w-75 mx-auto">
                          <a href="#!"><img class="card-img-top" src="{{ film.image.url }}" alt="..." /></a>
-                         <div class="card-body">
-                             <div class="small text-muted">{{ film.created }}</div>
-                              <h2 class="card-title h4">{{ film.title }}</h2>
-                             <p class="card-text">{{ film.summary }}</p>
-                              <a class="btn btn-dark" href="{% url 'film-detail' film.slug  %}">Detail filmu →</a>
-                           </div>
                        </div>
                    </div>
                   {% endfor %}

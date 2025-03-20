@@ -8,21 +8,21 @@
         background-attachment: fixed;
         background-size: contain;
         background-repeat: no-repeat;
-        height: 577px;
+        height: 500px;
     }
 </style>
 <div class="hero_banner mb-4">
 </div>
         <!-- Page content-->
-        <div class="container">
-            <div class="row gx-5">
+        <div class="container-fluid">
+            <div class="row gx-2">
                 <!-- Blog entries-->
-                <div class="col-lg-9">
+                <div class="col-lg-10">
                     <!-- Featured blog post-->
                     <!-- Nested row for non-featured blog posts-->
-                    <div class="row px-5">
+                    <div class="row px-2">
                         {% for review in reviews %}
-                        <div class="col-lg-6">
+                        <div class="col-md-6">
                             <!-- Blog post-->
                             <div class="card mb-4 bg-white border-0">
                                 <a href="#!"><img class="card-img-top" src="{{ review.image.url }}" alt="..." /></a>
@@ -58,21 +58,15 @@
                     <!-- Pagination-->
                 </div>
                 <!-- Side widgets-->
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <!-- Side widget-->
-                <div class="card mb-4 bg-light border-0">
+                <div class="card mb-4 bg-dark text-white rounded-0 border-0">
                   <div class="h3 mb-4 d-flex justify-content-center">Populární filmy</div>
                   {% for film in popular_films %}
                   <div>
                       <!-- Blog post-->
-                     <div class="card mb-4 border-0">
-                         <a href="#!"><img class="card-img-top" src="{{ film.image.url }}" alt="..." /></a>
-                         <div class="card-body">
-                             <div class="small text-muted">{{ film.created }}</div>
-                              <h2 class="card-title h4">{{ film.title }}</h2>
-                             <p class="card-text">{{ film.summary }}</p>
-                              <a class="btn btn-dark" href="{% url 'film-detail' film.slug  %}">Detail filmu →</a>
-                           </div>
+                     <div class="card mb-4 border-0 w-75 mx-auto">
+                         <a href="{% url 'film-detail' film.slug  %}"><img class="card-img-top" src="{{ film.image.url }}" alt="..." /></a>
                        </div>
                    </div>
                   {% endfor %}

@@ -10,13 +10,13 @@ from django.db.models import Avg, Count
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 
-def reset_password(request):
+def reset_password(request): #function view for reseting user's password utilising django's PasswordResetForm
     form = PasswordResetForm()
     context = {'form':form}
     return render(request, 'blog/user/change_password.html', context)
 
 
-def register_user(request):
+def register_user(request): #function view for registering the user
     form = RegisterUser()
     if request.method == 'POST':
         form = RegisterUser(request.POST)
@@ -27,7 +27,7 @@ def register_user(request):
     return render(request, 'blog/user/register.html', context)
 
 @login_required
-def update_user(request):
+def update_user(request): #function view for updating user's information
 
     form_user = UpdateUser(instance=request.user)
     form_password = PasswordChangeForm(request.user)
@@ -42,7 +42,7 @@ def update_user(request):
 
     return render(request, 'blog/user/update.html', context)
 
-def login_user(request):
+def login_user(request): #function view for logging in the user
     if request.method == 'POST':
         next_url = request.GET.get('next', 'home')
 
@@ -58,23 +58,23 @@ def login_user(request):
     return render(request, 'blog/user/login.html', {})
 
 
-def logout_user(request):
+def logout_user(request): #function view for logging out the user
     logout(request)
     return redirect('home')
 
-def home(request):
+def home(request): #function view rendering the home page
     popular_films = Film.objects.all()[:3]
     featured_review = Review.objects.latest("created")
     reviews_list = Review.objects.all()
-    paginator = Paginator(reviews_list, 6)
+    paginator = Paginator(reviews_list, 4) #paginating the review to display the maximum of 4 instances on one page
     page = request.GET.get('page', 1)
     reviews = paginator.page(page)
     context = {'reviews': reviews, 'featured_review': featured_review, 'popular_films': popular_films}
     return render(request, 'blog/home.html', context)
 
-def review_detail(request, slug):
+def review_detail(request, slug): #function view rendering the detail of a review
     review = get_object_or_404(Review, slug=slug)
-    comments = Comment.objects.filter(review__id=review.id).order_by('-created')
+    comments = Comment.objects.filter(review__id=review.id).order_by('-created') #comments associated with the review ordered by the creation time from newest to oldest
     related_reviews = Review.objects.filter(film=review.film).exclude(id=review.id)
     if request.method == 'POST':
         comment = (Comment.objects.create
@@ -88,13 +88,13 @@ def review_detail(request, slug):
     context = {'review': review, 'comments': comments, 'related_reviews': related_reviews}
     return render(request, 'blog/review/detail.html', context)
 
-def comment_delete(request, id, slug):
+def comment_delete(request, id, slug): #function view for deleting a comment
     comment = Comment.objects.get(id=id)
     comment.delete()
     return redirect('review-detail', slug)
 
 
-def review_list(request):
+def review_list(request): #function view rendering the list of all reviews
     popular_films = Film.objects.all()[:3]
     query_title = request.GET.get('hledat')
 
