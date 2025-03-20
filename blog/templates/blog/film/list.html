@@ -14,7 +14,7 @@
                     <!-- Blog post-->
                     <div class="d-none d-sm-block card mb-4 border-0 rounded-0">
                         <div class="d-flex align-items-center">
-                        <a href="#!"><img class="card-img-top rounded-0" src="{{ film.image.url }}" alt="..." /></a>
+                        <a href="{% url 'film-detail' film.slug  %}"><img class="card-img-top rounded-0" src="{{ film.image.url }}" alt="..." /></a>
                         <div class="card-body">
                             <div class="small text-muted">{{ film.created }}</div>
                             <h2 class="card-title h4">{{ film.title }}</h2>

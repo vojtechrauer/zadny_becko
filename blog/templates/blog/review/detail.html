@@ -21,6 +21,7 @@
                         </div>
                     </div>
                     <div class="text-muted fst-italic mb-2">Publikováno {{ review.created }} uživatelem {{ review.author }}</div>
+                    <a class="badge bg-secondary text-decoration-none link-light my-3" href="{% url 'film-detail' review.film.slug %}">Film: {{ review.film.title }}</a>
                 </header>
                 <!-- Preview image figure-->
                 <figure class="mb-4"><img class="img-fluid" src="{{ review.image.url }}" alt="..." /></figure>
@@ -44,7 +45,7 @@
                             <div class="ms-3 w-100 pe-5">
                                 <div class="d-flex justify-content-between">
                                 <div class="fw-bold">{{ comment.user }} <small class="fw-light">{{ comment.created }}</small></div>
-                                    {% if request.user == comment.user %}
+                                    {% if request.user == comment.user or request.user.is_staff %}
                                     <form method="post" action="{% url 'comment-delete' review.slug comment.id %}">
                                         {% csrf_token %}
                                         <button type="submit" class="btn-close" aria-label="Close"></button>
@@ -63,13 +64,12 @@
         <div class="col-lg-3">
             <!-- Side widget-->
             <h3 class="h3 text-center">Recenzovaný film:</h3>
-            <div class="card mb-4 border-0">
-                <a href="#!"><img class="card-img-top" src="{{ review.film.image.url }}" alt="..." /></a>
+            <div class="card mt-4 mb-4 border-0">
+                <a href="{% url 'film-detail' review.film.slug %}"><img class="card-img-top" src="{{ review.film.image.url }}" alt="..." /></a>
                 <div class="card-body">
                     <div class="small text-muted">{{ review.film.created }}</div>
                     <h2 class="card-title h4">{{ review.film.title }}</h2>
                     <p class="card-text">{{ review.film.summary }}</p>
-                    <a class="btn btn-dark" href="{% url 'film-detail' review.film.slug  %}">Detail filmu →</a>
                 </div>
             </div>
             <div class="card mb-4 bg-light p-2 border-0">

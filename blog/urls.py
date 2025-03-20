@@ -14,6 +14,7 @@ urlpatterns = [
     path('registrace/', views.register_user, name='register'),
     path('filmy/', views.film_list, name='film-list'),
     path('filmy/<slug:slug>', views.film_detail, name='film-detail'),
+    path('smazat-film/<slug:slug>', views.film_delete, name='film-delete'),
     path('filmy/<slug:slug>/oblibene/pridat', views.add_favorite_film, name='add-favorite-film'),
     path('filmy/<slug:slug>/oblibene/odebrat', views.delete_favorite_film, name='delete-favorite-film'),
     path('pridat-film/', views.film_create, name='film-create'),

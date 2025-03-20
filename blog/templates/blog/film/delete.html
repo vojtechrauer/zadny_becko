@@ -1,4 +1,4 @@
-{% extends 'blog/review/detail.html' %}
+{% extends 'blog/film/detail.html' %}
 
 {% block modal %}
 <script type="text/javascript">
@@ -13,14 +13,14 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">Smazat recenzi</h1>
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Smazat film</h1>
       </div>
       <div class="modal-body">
-        Opravdu chceš smazat recenzi {{ review.title }}?<br>
+        Opravdu chceš smazat film {{ film.title }}?<br>
           <small class="mt-3">(Tento krok je nevratný)</small>
       </div>
         <div class="modal-footer">
-        <a href="{% url 'home' %}" class="btn btn-secondary">Zavřít</a>
+        <a href="{% url 'film-detail' film.slug %}" class="btn btn-secondary">Zavřít</a>
             <form method="post">
                 {% csrf_token %}
                 <input type="submit" class="btn btn-danger" value="Smazat"/>

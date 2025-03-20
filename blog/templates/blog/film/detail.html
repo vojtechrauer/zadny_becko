@@ -7,13 +7,13 @@
         <section class="py-5">
             <div class="container px-4 px-lg-5 my-4">
                 <div class="row gx-4 gx-lg-5 align-items-center">
-                    <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="{{ film.image.url }}" alt="..." /></div>
-                    <div class="col-md-6">
+                    <div class="col-md-4"><img class="card-img-top mb-5 mb-md-0" src="{{ film.image.url }}" alt="..." /></div>
+                    <div class="col-md-8">
                         <div class="small mb-1">
                             {% if rating %}
                               <h1 class="h1">{{rating}} <span class="h4">/ 5 </span><img src="{% static 'assets/star.svg' %}" class="ml-3" style="height: 30px;"/> | <span class="h4">{{ film.in_favorites.count }}x v oblíbených</span></h1>
                             {% else %}
-                            <p class="h5">Bez hodnocení  <span class="h1">| </span><span class="h4">{{ film.in_favorites.count }}x v oblíbených<span></p>
+                            <p class="h5">Bez hodnocení  <span class="h1">| </span><span class="h4">{{ film.in_favorites.count }}x v oblíbených</span></p>
                             {% endif %}
                         </div>
                         <h1 class="display-5 fw-bolder">{{ film.title }}</h1>
@@ -21,21 +21,25 @@
                             <span>Režie: {{ film.director }}</span>
                         </div>
                         <p class="lead">{{ film.summary }}</p>
+                        <div class="d-flex">
                         {% if not in_favorites %}
                         <div>
                             <form method="post" action="{% url 'add-favorite-film' film.slug %}">
                                 {% csrf_token %}
-                            <input type="submit" class="btn btn-outline-danger" value="Přidat film do oblíbených ❤️">
+                            <input type="submit" class="btn btn-outline-light" value="Přidat film do oblíbených ❤️">
                             </form>
                         </div>
                         {% else %}
                         <div>
                             <form method="post" action="{% url 'delete-favorite-film' film.slug %}">
                                 {% csrf_token %}
-                            <input type="submit" class="btn btn-outline-danger" value="Odebrat film z oblíbených 💔">
+                            <input type="submit" class="btn btn-outline-light" value="Odebrat film z oblíbených 💔">
                             </form>
                         </div>
                         {% endif %}
+                            <a href="#" class="btn btn-outline-warning ms-3">Upravit film</a>
+                            <a href="{% url 'film-delete' film.slug %}" class="btn btn-outline-danger ms-3">Smazat film</a>
+                            </div>
                     </div>
                 </div>
             </div>
@@ -50,7 +54,7 @@
                     <div class="col mb-5">
                         <div class="card h-100 border-0">
                             <!-- Product image-->
-                            <img class="card-img-top" src="{{review.image.url}}" alt="..." />
+                            <a href="{% url 'review-detail' review.slug %}"><img class="card-img-top" src="{{review.image.url}}" alt="..." /></a>
                             <!-- Product details-->
                             <div class="card-body p-4">
                                     <div class="rating">
@@ -83,4 +87,6 @@
                 </div>
             </div>
         </section>
+{% block modal %}
+{% endblock modal %}
 {% endblock content %}

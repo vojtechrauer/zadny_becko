@@ -12,9 +12,11 @@
               <img src="{{user.profile_pic.url}}"
                 alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
                 style="width: 150px; z-index: 1">
+                {% if request.user == user %}
               <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#settingsModal" style="z-index: 1;">
                 Nastavení
               </button>
+                {% endif %}
 
             </div>
             <div class="ms-3" style="margin-top: 130px;">
@@ -43,7 +45,7 @@
                   {% if favorite_films %}
                   {% for favorite in favorite_films %}
                   <div class="card border-0 m-1" style="width: 15rem;">
-                      <img class="card-img-top" src="{{ favorite.film.image.url }}" alt="Card image cap">
+                      <a href="{% url 'film-detail' favorite.film.slug %}"><img class="card-img-top" src="{{ favorite.film.image.url }}" alt="Card image cap"></a>
                       <div class="card-body">
                         <p class="card-text">{{ favorite.film.title }}</p>
                       </div>
@@ -73,7 +75,20 @@
                             <div class="small text-muted">{{review.created}}</div>
                             <h2 class="card-title h4">{{review.title}}</h2>
                             <p class="card-text">{{ review.body|truncatechars_html:100|safe}}</p>
-                            <a class="btn btn-warning" href="{% url 'review-detail' review.slug %}">Číst →</a>
+                                                                <div class="d-flex justify-content-between">
+                                    <a class="btn btn-dark" href="{% url 'review-detail' review.slug %}">Číst →</a>
+                                        {% if request.user == review.author or request.user.is_staff %}
+                                        <div class="dropdown">
+                                          <a class="pe-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <img src="{% static 'assets/three-dots.svg' %}"/>
+                                          </a>
+                                          <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="{% url 'review-update' review.slug %}">Upravit</a></li>
+                                            <li><a href="{% url 'review-delete' review.slug %}" class="dropdown-item">Smazat</a></li>
+                                          </ul>
+                                        </div>
+                                        {% endif %}
+                                    </div>
                         </div>
                     </div>
                 </div>

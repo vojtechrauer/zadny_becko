@@ -63,9 +63,9 @@ def logout_user(request): #function view for logging out the user
     return redirect('home')
 
 def home(request): #function view rendering the home page
-    popular_films = Film.objects.all()[:3]
+    popular_films = Film.objects.annotate(favorite_count=Count('in_favorites')).order_by('-favorite_count')[:3]
     featured_review = Review.objects.latest("created")
-    reviews_list = Review.objects.all()
+    reviews_list = Review.objects.all().order_by('-created')
     paginator = Paginator(reviews_list, 4) #paginating the review to display the maximum of 4 instances on one page
     page = request.GET.get('page', 1)
     reviews = paginator.page(page)
@@ -191,6 +191,23 @@ def film_detail(request, slug):
     context = {'film': film, 'reviews': reviews, 'rating':rating, 'form':form, 'in_favorites': in_favorites}
 
     return render(request, 'blog/film/detail.html', context)
+
+def film_delete(request, slug):
+    film = Film.objects.get(slug=slug)
+    in_favorites = request.user.favorite_films.filter(film=film).exists()
+    try:
+        rating = film.review_set.all().aggregate(Avg('rating'))['rating__avg']
+    except TypeError:
+        rating = None
+
+    if request.method == 'POST':
+        film.delete()
+        return redirect('film-list')
+
+    context = {'film': film, 'rating': rating, 'in_favorites': in_favorites}
+    return render(request, 'blog/film/delete.html', context)
+
+
 
 def add_favorite_film(request, slug):
     if request.method == 'POST':

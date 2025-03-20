@@ -13,7 +13,7 @@
                 <div class="col-md-6">
                     <!-- Blog post-->
                     <div class="card mb-4 bg-white border-0">
-                        <a href="#!"><img class="card-img-top" src="{{ review.image.url }}" alt="..." /></a>
+                        <a href="{% url 'review-detail' review.slug %}"><img class="card-img-top" src="{{ review.image.url }}" alt="..." /></a>
                         <div class="card-body">
                             <div class="rating">
                                 {% for _ in ""|rjust:review.rating %}
@@ -21,11 +21,12 @@
                                 {% endfor %}
                             </div>
                             <div class="small text-muted">{{ review.created }}</div>
+                            <a class="badge bg-secondary text-decoration-none link-light my-3" href="{% url 'film-detail' review.film.slug %}">Film: {{ review.film.title }}</a>
                             <h2 class="card-title h4">{{ review.title }}</h2>
                             <p class="card-text">{{ review.body|truncatechars_html:250|safe }}</p>
                             <div class="d-flex justify-content-between">
                                 <a class="btn btn-dark" href="{% url 'review-detail' review.slug %}">Číst →</a>
-                                {% if request.user == review.author %}
+                                {% if request.user == review.author or request.user.is_staff %}
                                 <div class="dropdown">
                                     <a class="pe-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <img src="{% static 'assets/three-dots.svg' %}"/>
