@@ -1,0 +1,15 @@
+{% load static %}
+<nav aria-label="Pagination">
+    <hr class="my-0"/>
+    <ul class="pagination justify-content-center align-items-center my-4">
+        {% if page.has_previous %}
+        <li class="page-item"><a href="?page={{ page.previous_page_number }}"><img
+                src="{% static 'assets/arrow-left-circle-fill.svg' %}"/></a></li>
+        {% endif %}
+        <li class="page-item"><p class="p-0 my-0 mx-2 d-flex align-items-center justify-content-center">Strana {{ page.number }} z {{ page.paginator.num_pages }}</p></li>
+        {% if page.has_next %}
+        <li><a href="?page={{ page.next_page_number }}"><img
+                src="{% static 'assets/arrow-right-circle-fill.svg' %}"/></a></li>
+        {% endif %}
+    </ul>
+</nav>

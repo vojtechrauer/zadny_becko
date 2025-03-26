@@ -1,0 +1,97 @@
+{% extends 'blog/main.html' %}
+{% load static %}
+{% block content %}
+
+
+<!-- main section-->
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-4">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-4"><img class="card-img-top mb-5 mb-md-0" src="{{ film.image.url }}" alt="..."/></div>
+            <div class="col-md-8">
+                <div class="small mb-1">
+                    {% if rating %}
+                    <h1 class="h1">{{rating}} <span class="h4">/ 5 </span><img src="{% static 'assets/star.svg' %}"
+                                                                               class="ml-3" style="height: 30px;"/> |
+                        <span class="h4">{{ film.in_favorites.count }}x v oblíbených</span></h1>
+                    {% else %}
+                    <p class="h5">Bez hodnocení <span class="h1">| </span><span class="h4">{{ film.in_favorites.count }}x v oblíbených</span>
+                    </p>
+                    {% endif %}
+                </div>
+                <h1 class="display-5 fw-bolder">{{ film.title }}</h1>
+                <div class="fs-5 mb-5">
+                    <span>Režie: {{ film.director }}</span>
+                </div>
+                <p class="lead">{{ film.summary }}</p>
+                <div class="d-flex">
+                    {% if not in_favorites %}
+                    <div>
+                        <form method="post" action="{% url 'add-favorite-film' film.slug %}">
+                            {% csrf_token %}
+                            <input type="submit" class="btn btn-outline-light" value="Přidat film do oblíbených ❤️">
+                        </form>
+                    </div>
+                    {% else %}
+                    <div>
+                        <form method="post" action="{% url 'delete-favorite-film' film.slug %}">
+                            {% csrf_token %}
+                            <input type="submit" class="btn btn-outline-light" value="Odebrat film z oblíbených 💔">
+                        </form>
+                    </div>
+                    {% endif %}
+                    <a href="{% url 'film-update' film.slug %}" class="btn btn-outline-warning ms-3">Upravit film</a>
+                    <a href="{% url 'film-delete' film.slug %}" class="btn btn-outline-danger ms-3">Smazat film</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Related films section-->
+<section class="py-1">
+    <div class="container px-4 px-lg-5 mt-1">
+        <h2 class="fw-bolder mb-4">Recenze filmu {{ film.title }}</h2>
+        <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center">
+            {% if reviews %}
+            {% for review in reviews %}
+            <div class="col mb-5">
+                <div class="card h-100 border-0">
+                    <!-- review image-->
+                    <a href="{% url 'review-detail' review.slug %}"><img class="card-img-top" src="{{review.image.url}}"
+                                                                         alt="..."/></a>
+                    <!-- review details-->
+                    <div class="card-body p-4">
+                        <div class="rating">
+                            {% for _ in ""|rjust:review.rating %}
+                            <img src="{% static 'assets/star.svg' %}" class="ml-3 mb-3"
+                                 style="height: 30px; color: white"/>
+                            {% endfor %}
+                        </div>
+                        <!-- review name-->
+                        <h5 class="fw-bolder">{{review.title}}</h5>
+                        <!-- review author -->
+                        {{review.author}}
+                        <p>{{review.created|date:"d.m.Y"}}</p>
+                    </div>
+                    <!-- action button -->
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center"><a class="btn btn-outline-dark mt-auto"
+                                                    href="{% url 'review-detail' review.slug %}">Číst</a></div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="card mb-4 bg-dark border-0 text-center">
+                <div class="card-body">
+                    <p class="card-text text-white">Vypadá to, že tenhle film žádné recenze nemá! </p>
+                    <a class="btn btn-warning" href="{% url 'review-create' %}?film={{film.slug}}">Napravíš to? →</a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% block modal %}
+{% endblock modal %}
+{% endblock content %}

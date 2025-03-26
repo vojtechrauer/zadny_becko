@@ -1,0 +1,14 @@
+{% extends 'blog/main.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container col-lg-6 bg-white text-dark rounded">
+    <h1 class="h1 text-center pt-3">Přidat recenzi</h1>
+    <form class="p-5 mx-auto my-4" method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }}
+        {{ form|crispy }}
+        <input type="submit" class="btn btn-lg btn-warning" value="Přidat recenzi">
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'blog/main.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid p-3">
+    <div class="row gx-5">
+        <div class="col-lg-2">
+            <!-- Side widget-->
+            <div class="card mb-4 bg-dark text-white rounded-0 border-0">
+                <div class="h3 mb-4 d-flex justify-content-center">Populární filmy</div>
+                {% for film in popular_films %}
+                <div>
+                    <!-- film card-->
+                    <div class="card mb-4 border-0 w-75 mx-auto">
+                        <a href="{% url 'film-detail' film.slug  %}"><img class="card-img-top"
+                                                                          src="{{ film.image.url }}" alt="..."/></a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- main content -->
+        <div class="col-lg-7 mt-5">
+            <!-- directors list -->
+            <ul class="list-group mt-3 list-group-flush">
+                {% for director in directors %}
+                <li class="list-group-item list-group-item-action bg-dark text-white"><a
+                        href="{% url 'director-detail' director.slug %}" class="link-light link-underline-opacity-0">{{ director }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <!-- Side widgets-->
+        <div class="col-lg-3">
+            <!-- recent reviews-->
+            <div class="card mb-4 bg-dark text-white border-0 p-0">
+                <div class="h3 mb-4 d-flex justify-content-center">Nejnovější recenze</div>
+                {% for review in reviews %}
+                <div>
+                    <!-- review card -->
+                    <div class="card mb-4 border-0">
+                        <a href="#!"><img class="card-img-top" src="{{ review.image.url }}" alt="..."/></a>
+                        <div class="card-body">
+                            <div class="rating">
+                                {% for _ in ""|rjust:review.rating %}
+                                <img src="{% static 'assets/star.svg' %}" class="ml-3 mb-3" style="height: 30px;"/>
+                                {% endfor %}
+                            </div>
+                            <div class="small text-muted">{{ review.created }}</div>
+                            <h5 class="card-title h5 text-bold">{{ review.title }}</h5>
+                            <a class="btn btn-dark" href="{% url 'review-detail' review.slug  %}">číst →</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'blog/pagination.html' with page=directors %}
+{% endblock content %}

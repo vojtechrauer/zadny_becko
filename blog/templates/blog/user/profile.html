@@ -1,0 +1,106 @@
+{% extends 'blog/main.html' %}
+{% load static %}
+{% block content %}
+
+<section class="h-100 gradient-custom-2">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center">
+      <div class="col col-lg-9 col-xl-8">
+        <div class="card border-0">
+          <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
+            <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+              <img src="{{user.profile_pic.url}}"
+                alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                style="width: 150px; z-index: 1">
+                {% if request.user == user %}
+              <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#settingsModal" style="z-index: 1;">
+                Nastavení
+              </button>
+                {% endif %}
+
+            </div>
+            <div class="ms-3" style="margin-top: 130px;">
+              <h5>{{user.username}}</h5>
+            </div>
+          </div>
+          <div class="p-4 text-black bg-body-tertiary">
+            <div class="d-flex justify-content-end text-center py-1 text-body">
+              <div>
+                <p class="mb-1 h5">{{reviews.count}}</p>
+                <p class="small text-muted mb-0">Recenze</p>
+              </div>
+              <div class="px-3">
+                <p class="mb-1 h5">{{ user.comment_set.count }}</p>
+                <p class="small text-muted mb-0">Komentáře</p>
+              </div>
+            </div>
+          </div>
+          <div class="card-body mt-5 p-4 text-black">
+
+
+
+            <div class="mb-5 text-center d-flex flex-column">
+              <p class="lead fw-normal mb-1">Oblíbené filmy</p>
+              <div class="p-4 bg-body-tertiary d-flex flex-wrap justify-content-center">
+                  {% if favorite_films %}
+                  {% for favorite in favorite_films %}
+                  <div class="card border-0 m-1" style="width: 15rem;">
+                      <a href="{% url 'film-detail' favorite.film.slug %}"><img class="card-img-top" src="{{ favorite.film.image.url }}" alt="Card image cap"></a>
+                      <div class="card-body">
+                        <p class="card-text">{{ favorite.film.title }}</p>
+                      </div>
+                  </div>
+                  {% endfor %}
+                  {% else %}
+                   <p class="font-italic mb-1">Tento uživatel nemá žádné oblíbené filmy</p>
+                  {% endif %}
+              </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-4 text-body">
+              <p class="lead fw-normal mb-0">Recenze od uživatele {{user.username}}</p>
+            </div>
+            <div class="row g-2">
+                {% for review in reviews %}
+                <div class="col-lg-6">
+                    <!-- Blog review-->
+                    <div class="card mb-4 border-0">
+                        <a href="{% url 'review-detail' review.slug %}"><img class="card-img-top" src="{{review.image.url}}" alt="..." /></a>
+
+                        <div class="card-body">
+                            <div class="rating">
+                                {% for _ in ""|rjust:review.rating %}
+                                <img src="{% static 'assets/star.svg' %}" class="ml-3 mb-3" style="height: 30px;"/>
+                                {% endfor %}
+                            </div>
+                            <div class="small text-muted">{{review.created}}</div>
+                            <h2 class="card-title h4">{{review.title}}</h2>
+                            <p class="card-text">{{ review.body|truncatechars_html:100|safe}}</p>
+                                                                <div class="d-flex justify-content-between">
+                                    <a class="btn btn-dark" href="{% url 'review-detail' review.slug %}">Číst →</a>
+                                        {% if request.user == review.author or request.user.is_staff %}
+                                        <div class="dropdown">
+                                          <a class="pe-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <img src="{% static 'assets/three-dots.svg' %}"/>
+                                          </a>
+                                          <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="{% url 'review-update' review.slug %}">Upravit</a></li>
+                                            <li><a href="{% url 'review-delete' review.slug %}" class="dropdown-item">Smazat</a></li>
+                                          </ul>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+{% include 'blog/user/update.html' %}
+
+{% endblock %}

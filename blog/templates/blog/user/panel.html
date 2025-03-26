@@ -1,0 +1,31 @@
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body text-center">
+        <div class="container">
+            <img src="{{ request.user.profile_pic.url }}" class="rounded-circle mb-3"
+                 style="width: 100px; height: 100px; object-fit:cover;"/>
+            <h2 class="h2 mb-5">{{ request.user.username }}</h2>
+        </div>
+        <div>
+            <p>
+                <a class="btn btn-warning w-100" data-bs-toggle="collapse" href="#collapseExample" role="button"
+                   aria-expanded="false" aria-controls="collapseExample">
+                    Přidat obsah
+                </a>
+            </p>
+            <div class="collapse" id="collapseExample">
+                <div class="card card-body border-0">
+                    <a href="{% url 'review-create' %}" class="btn btn-light w-100 mb-3" type="button">Recenzi</a>
+                    <a href="{% url 'film-create' %}" class="btn btn-light w-100 mb-3" type="button">Film</a>
+                    <a href="{% url 'director-create' %}" class="btn btn-light w-100 mb-3" type="button">Režiséra</a>
+                </div>
+            </div>
+            <a href="{% url 'profile' request.user.username %}" class="btn btn-light w-100 mb-3"
+               type="button">Profil</a>
+            <a href="{% url 'logout' %}" class="btn btn-light w-100 mb-3" type="button">Odhlásit se</a>
+        </div>
+    </div>
+</div>

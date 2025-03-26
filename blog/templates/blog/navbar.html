@@ -1,0 +1,56 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg px-4 py-2 navbar-dark justify-content-between">
+    <div class="container-fluid">
+        <a class="navbar-brand text-white" href="{% url 'home' %}">žádný béčko</a> <!-- Brand link -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span> <!-- Toggler icon -->
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'home' %}">Domů</a> <!-- Home link -->
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'film-list' %}">Filmy</a> <!-- Films link -->
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'review-list' %}">Recenze</a> <!-- Reviews link -->
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'director-list' %}">Režiséři</a> <!-- Directors link -->
+                </li>
+            </ul>
+
+            {% if request.resolver_match.view_name == "film-list" or request.resolver_match.view_name == "review-list" %}
+            <form class="d-none d-lg-flex mx-auto w-50" role="search" method="get" action="">
+                <input name="hledat" class="form-control me-2 bg-dark text-white" type="search"
+                       placeholder="Zadejte název hledaného filmu" aria-label="Search"> <!-- Search input -->
+                <button class="btn btn-outline-warning" type="submit">Hledat</button> <!-- Search button -->
+            </form>
+            {% else %}
+            <form class="d-none d-lg-flex mx-auto w-50" role="search" style="visibility: hidden;" method="get"
+                  action="">
+                <input name="hledat" class="form-control me-2 bg-dark text-white" type="search"
+                       placeholder="Zadejte název hledaného filmu" aria-label="Search">
+                <button class="btn btn-outline-warning" type="submit">Hledat</button>
+            </form>
+            {% endif %}
+
+            {% if request.user.is_authenticated %}
+            <button class="btn btn-warning" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                    aria-controls="offcanvasRight"><img src="{% static 'assets/chevron-left.svg' %}" class="me-2"/>{{ request.user.username }}
+            </button> <!-- User panel button -->
+            {% else %}
+            <div class="d-flex align-items-center justify-content-center">
+                <a href="{% url 'login' %}" class="nav-link">
+                    <button type="submit" class="btn btn-outline-light mx-2 p-1 px-2">Přihlásit se</button> <!-- Login button -->
+                </a>
+                <a href="{% url 'register' %}" class="nav-link ">
+                    <button type="submit" class="btn btn-warning p-1 px-2">Registrovat se</button> <!-- Register button -->
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</nav>

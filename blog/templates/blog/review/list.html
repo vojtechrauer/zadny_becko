@@ -1,0 +1,70 @@
+{% extends 'blog/main.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row gx-2 mt-5">
+        <!-- main content -->
+        <div class="col-lg-10">
+            <div class="row px-2">
+                {% for review in reviews %}
+                <div class="col-md-6">
+                    <!-- review card -->
+                    <div class="card mb-4 bg-white border-0">
+                        <a href="{% url 'review-detail' review.slug %}"><img class="card-img-top"
+                                                                             src="{{ review.image.url }}"
+                                                                             alt="..."/></a>
+                        <div class="card-body">
+                            <div class="rating">
+                                {% for _ in ""|rjust:review.rating %}
+                                <img src="{% static 'assets/star.svg' %}" class="ml-3 mb-3" style="height: 30px;"/>
+                                {% endfor %}
+                            </div>
+                            <div class="small text-muted">{{ review.created }}</div>
+                            <a class="badge bg-secondary text-decoration-none link-light my-3"
+                               href="{% url 'film-detail' review.film.slug %}">Film: {{ review.film.title }}</a>
+                            <h2 class="card-title h4">{{ review.title }}</h2>
+                            <p class="card-text">{{ review.body|truncatechars_html:250|safe }}</p>
+                            <div class="d-flex justify-content-between">
+                                <a class="btn btn-dark" href="{% url 'review-detail' review.slug %}">Číst →</a>
+                                {% if request.user == review.author or request.user.is_staff %}
+                                <div class="dropdown">
+                                    <a class="pe-3" href="#" role="button" data-bs-toggle="dropdown"
+                                       aria-expanded="false">
+                                        <img src="{% static 'assets/three-dots.svg' %}"/>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{% url 'review-update' review.slug %}">Upravit</a>
+                                        </li>
+                                        <li><a href="{% url 'review-delete' review.slug %}"
+                                               class="dropdown-item">Smazat</a></li>
+                                    </ul>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- Side widgets-->
+        <div class="col-lg-2">
+            <!-- popular films widget -->
+            <div class="card mb-4 bg-dark text-white border-0">
+                <div class="h3 mb-4 d-flex justify-content-center">Populární filmy</div>
+                {% for film in popular_films %}
+                <div>
+                    <!-- film card -->
+                    <div class="card mb-4 border-0 w-75 mx-auto">
+                        <a href="#!"><img class="card-img-top" src="{{ film.image.url }}" alt="..."/></a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'blog/pagination.html' with page=reviews %}
+{% endblock content %}

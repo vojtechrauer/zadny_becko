@@ -1,0 +1,57 @@
+{% extends 'blog/main.html' %}
+{% load static %}
+{% block content %}
+
+
+<!-- director section-->
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-4">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-4"><img class="card-img-top mb-5 mb-md-0" src="{{ director.image.url }}" alt="..."/>
+            </div>
+            <div class="col-md-8">
+                <h1 class="display-5 fw-bolder">{{ director.name }}</h1>
+                <p class="lead">{{ director.bio }}</p>
+                <div class="d-flex">
+                    <a href="{% url 'director-update' director.slug %}" class="btn btn-outline-warning ms-3">Upravit
+                        režiséra</a>
+                    <a href="{% url 'director-delete' director.slug %}" class="btn btn-outline-danger ms-3">Smazat
+                        režiséra</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Related films section-->
+<section class="py-1">
+    <div class="container px-4 px-lg-5 mt-1">
+        <div class="mb-5 text-center d-flex flex-column">
+            <p class="lead fw-normal mb-1">Filmy režiséra {{ director.name }}</p>
+            <div class="p-4 bg-dark text-white d-flex flex-wrap justify-content-center">
+                {% if directors_films %}
+                {% for film in directors_films %}
+                <div class="card border-0 m-1" style="width: 15rem;">
+                    <a href="{% url 'film-detail' film.slug %}"><img class="card-img-top" src="{{ film.image.url }}"
+                                                                     alt="Card image cap"></a>
+                    <div class="card-body">
+                        <p class="card-text">{{ film.title }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="card mb-4 bg-dark border-0 text-center">
+                    <div class="card-body">
+                        <p class="card-text text-white">Vypadá to, že jsme zatím nepřidali žádný film tohoto
+                            režiséra</p>
+                        <a class="btn btn-warning" href="{% url 'film-create' %}?director={{director.slug}}">Napravíš
+                            to? →</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% block modal %}
+{% endblock modal %}
+{% endblock content %}

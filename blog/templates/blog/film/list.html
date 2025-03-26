@@ -1,0 +1,87 @@
+{% extends 'blog/main.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="container-fluid p-3">
+    <div class="row gx-2">
+        <!-- Blog entries-->
+        <div class="col-lg-9">
+            <!-- Nested row for non-featured blog posts-->
+            <div class="row px-2 bg-dark mx-2">
+                {% for film in films %}
+                <div class="col-xxl-6">
+                    <!-- Blog post-->
+                    <div class="d-none d-sm-block card mb-4 border-0 rounded-0">
+                        <div class="d-flex align-items-center">
+                            <a href="{% url 'film-detail' film.slug  %}"><img class="card-img-top rounded-0"
+                                                                              src="{{ film.image.url }}" alt="..."/></a>
+                            <div class="card-body">
+                                <div class="small text-muted">{{ film.created }}</div>
+                                <h2 class="card-title h4">{{ film.title }}</h2>
+                                <p class="card-text">{{ film.summary }}</p>
+                                <a class="btn btn-dark" href="{% url 'film-detail' film.slug  %}">Detail filmu →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-block d-sm-none card mb-4 border-0">
+                        <a href="{% url 'film-detail' film.slug  %}"><img class="card-img-top"
+                                                                          src="{{ film.image.url }}" alt="..."/></a>
+                        <div class="card-body">
+                            <div class="small text-muted">{{ film.created }}</div>
+                            <h2 class="card-title h4">{{ film.title }}</h2>
+                            <p class="card-text">{{ film.summary }}</p>
+                            <a class="btn btn-dark" href="{% url 'film-detail' film.slug  %}">Detail filmu →</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- Side widgets-->
+        <div class="col-lg-3">
+            <div class="row px-2 bg-dark mx-3">
+                <!-- tags widget-->
+                <div class="card mb-4">
+                    <div class="card-header">Populární tagy</div>
+                    <div class="card-body">
+                        <div class="row">
+                            {% for tag in tags %}
+                            <div class="col-sm-6">
+                                <ul class="list-unstyled mb-0">
+                                    <li><a href="?tag={{ tag.slug }}">{{ tag.name }}</a></li>
+                                </ul>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <!-- Side widget-->
+                <div class="card mb-4 bg-dark text-white border-0 p-0">
+                    <div class="h3 mb-4 d-flex justify-content-center">Nejnovější recenze</div>
+                    {% for review in reviews %}
+                    <div>
+                        <!-- review card-->
+                        <div class="card mb-4 border-0">
+                            <a href="#!"><img class="card-img-top" src="{{ review.image.url }}" alt="..."/></a>
+                            <div class="card-body">
+                                <div class="rating">
+                                    {% for _ in ""|rjust:review.rating %}
+                                    <img src="{% static 'assets/star.svg' %}" class="ml-3 mb-3" style="height: 30px;"/>
+                                    {% endfor %}
+                                </div>
+                                <div class="small text-muted">{{ review.created }}</div>
+                                <h5 class="card-title h5 text-bold">{{ review.title }}</h5>
+                                <a class="btn btn-dark" href="{% url 'review-detail' review.slug  %}">číst →</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'blog/pagination.html' with page=films %}
+{% endblock content %}
